@@ -23,10 +23,15 @@ public class JCadastro extends javax.swing.JFrame {
     public JCadastro(ModeloTabela modeloTabela) {
         this.modeloTabela = modeloTabela;
         initComponents();
+        //setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); //Isso fecha a aplicação inteira quando a janela é fechada.
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        // Modo de cadastro
+        setTitle("Cadastro de Cliente"); // no modo cadastro
+        btnIncluirCadastro.setVisible(true);
+        btnSalvar.setVisible(false);
+
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,6 +54,7 @@ public class JCadastro extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtEnderecoCadastro = new javax.swing.JTextArea();
         btnIncluirCadastro = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,29 +85,38 @@ public class JCadastro extends javax.swing.JFrame {
             }
         });
 
+        btnSalvar.setText("Salvar Alterações");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnIncluirCadastro)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel1)
-                        .addComponent(txtNomeCadastro)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addComponent(txtCPFCNPJCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(25, 25, 25)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4)
-                                .addComponent(txtTelefoneCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)))
-                        .addComponent(txtEmailCadastro)
-                        .addComponent(jScrollPane1)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnIncluirCadastro))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNomeCadastro, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(txtCPFCNPJCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(txtTelefoneCadastro, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)))
+                    .addComponent(txtEmailCadastro, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -128,7 +143,9 @@ public class JCadastro extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
-                .addComponent(btnIncluirCadastro)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIncluirCadastro)
+                    .addComponent(btnSalvar))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -142,13 +159,38 @@ public class JCadastro extends javax.swing.JFrame {
     private void btnIncluirCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirCadastroActionPerformed
         DAO dao = new DAO();
         //dao.cadastrarCliente(new Cliente(null, txtNomeCadastro.getText(), txtCPFCNPJCadastro.getText(), txtEmailCadastro.getText(), txtTelefoneCadastro.getText(), txtEnderecoCadastro.getText()));
-        Cliente cliente = new Cliente(null, txtNomeCadastro.getText(), txtCPFCNPJCadastro.getText(), 
+        Cliente cliente = new Cliente(null, txtNomeCadastro.getText(), txtCPFCNPJCadastro.getText(),
                 txtEmailCadastro.getText(), txtTelefoneCadastro.getText(), txtEnderecoCadastro.getText());
 
         dao.cadastrarCliente(cliente);
         modeloTabela.adicionarCliente(cliente);
         this.dispose();
     }//GEN-LAST:event_btnIncluirCadastroActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        // TODO add your handling code here:
+        if (clienteEmEdicao != null) {
+            // Atualiza os dados no objeto
+            clienteEmEdicao.setCpfCnpj(txtCPFCNPJCadastro.getText());
+            clienteEmEdicao.setNome(txtNomeCadastro.getText());
+            clienteEmEdicao.setEmail(txtEmailCadastro.getText());
+            clienteEmEdicao.setTelefone(txtTelefoneCadastro.getText());
+            clienteEmEdicao.setEndereco(txtEnderecoCadastro.getText());
+
+            // Atualiza no banco de dados
+            DAO dao = new DAO();
+            dao.alterarCliente(clienteEmEdicao);
+
+            // Atualiza a tabela visual
+            modeloTabela.atualizarCliente(clienteEmEdicao);
+
+            // Mensagem e fechar
+            javax.swing.JOptionPane.showMessageDialog(this, "Cliente alterado com sucesso!");
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Nenhum cliente em edição!");
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,8 +224,37 @@ public class JCadastro extends javax.swing.JFrame {
         new JCadastro(modeloTabela).setVisible(true);
     }
 
+    private void preencherCampos(Cliente cliente) {
+        txtCPFCNPJCadastro.setText(cliente.getCpfCnpj());
+        txtNomeCadastro.setText(cliente.getNome());
+        txtEmailCadastro.setText(cliente.getEmail());
+        txtTelefoneCadastro.setText(cliente.getTelefone());
+        txtEnderecoCadastro.setText(cliente.getEndereco());
+    }
+
+    private Cliente clienteEmEdicao;
+    //  private ModeloTabela modeloTabela;
+
+    public JCadastro(Cliente cliente, ModeloTabela modeloTabela) {
+
+        setTitle("Alterar Cliente: " + cliente.getNome()); // no modo edição
+
+        this.clienteEmEdicao = cliente;
+        this.modeloTabela = modeloTabela;
+        initComponents(); // chama os componentes da janela
+        preencherCampos(cliente); // método que tu vai criar abaixo
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        // Modo de edição
+        btnIncluirCadastro.setVisible(false);
+        btnSalvar.setVisible(true);
+
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIncluirCadastro;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

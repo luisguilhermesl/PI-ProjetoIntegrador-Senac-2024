@@ -20,6 +20,13 @@ public class JLogin extends javax.swing.JFrame {
      */
     public JLogin() {
         initComponents();
+        txtSenha.addActionListener(e -> btnEntrar.doClick());
+        setLocationRelativeTo(null); // se tu já tiver isso, beleza
+        setTitle("Tela de Login");
+       // pack();
+       // getRootPane().setDefaultButton(btnEntrar); // aqui ativa o Enter
+       
+        
 
     }
 
@@ -139,7 +146,7 @@ public class JLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSenhaActionPerformed
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
-        JButton btnEntrar = new JButton("Entrar");
+        // JButton btnEntrar = new JButton("Entrar");
         Criptografia cripto = new Criptografia(txtSenha.getText(), Criptografia.MD5);
         System.out.println(cripto.criptografar());
 

@@ -58,7 +58,7 @@ public class DAO {
         Cliente cliente = null;
         try {
             preparedStatement = connection.prepareStatement(CONSULTAR_CLIENTE);
-            preparedStatement.setString(1, id);
+            preparedStatement.setInt(1, Integer.parseInt(id)); //Isso mantém o ID no banco como numérico
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 cliente = new Cliente(resultSet.getString("ID"), resultSet.getString("nome"), resultSet.getString("CPFCNPJ"),
@@ -76,7 +76,7 @@ public class DAO {
         return cliente;
     }
 
-    public void alterarCliente(String id, Cliente cliente) {
+    public void alterarCliente(Cliente cliente) {
         Connection connection = Conexao.getConn().abrirConexao();
         try {
             preparedStatement = connection.prepareStatement(ALTERAR_CLIENTE);
@@ -86,7 +86,7 @@ public class DAO {
             preparedStatement.setString(i++, cliente.getEmail());
             preparedStatement.setString(i++, cliente.getTelefone());
             preparedStatement.setString(i++, cliente.getEndereco());
-            preparedStatement.setString(i++, id);
+            preparedStatement.setString(i++, cliente.getId());
             preparedStatement.execute();
             connection.commit();
             JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso ");
