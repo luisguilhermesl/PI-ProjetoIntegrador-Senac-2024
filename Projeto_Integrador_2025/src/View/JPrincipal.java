@@ -8,18 +8,8 @@ import Model.Cliente;
 import Model.ModeloTabela;
 import dao.DAO;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -28,86 +18,32 @@ import javax.swing.table.DefaultTableModel;
 public class JPrincipal extends javax.swing.JFrame {
 
     private ArrayList<Cliente> clientes;
-    private ModeloTabela modeloTabela; 
+    private ModeloTabela modeloTabela;
 
     /**
      * Creates new form JPrincipal
      */
+    
     public JPrincipal() {
         initComponents();
-        setTitle("Tela Principal");
 
-        // 1. PRIMEIRO: Inicializar a lista de clientes
+        JCadastro cadastro = new JCadastro(modeloTabela);
+        cadastro.setVisible(true);
+
         DAO dao = new DAO();
         try {
+            //clientes = new ArrayList<>(); // Inicializando a lista
             clientes = dao.listarClientes();
         } catch (Exception e) {
             e.printStackTrace();
-            clientes = new ArrayList<>(); // Fallback para lista vazia
         }
 
-        // 2. SEGUNDO: Criar o ModeloTabela com a lista
-        modeloTabela = new ModeloTabela(clientes);
-
-        // 3. TERCEIRO: Configurar a JTable para usar o ModeloTabela
-        jTable1.setModel(modeloTabela);
-
-        //22-06-26 22:52 - ABRIR TELA DE CADASTRO APARTIR DA TELA DE CADASTRO
-//        jTable1.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                //super.mouseClicked(e); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-//                //Qual botão vai ser clicado o direito ou esquerdo do mouse
-//                if (e.getButton() == 1) { //1 é o btn *esquerdo* 2 o scroll e 3 o direito
-//                        Cliente clienteSelecionado;
-//                    try {
-//                        clienteSelecionado = dao.consultarCliente(modeloTabela.getValueAt(jTable1.getSelectedRow(), 0).toString());
-//                    } catch (Exception ex) {
-//                        Logger.getLogger(JPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                        JCadastro jCadastro = new JCadastro(clienteSelecionado);
-//                    
-//                }
-//
-//            }
-//
-//        }
-        // 4. QUARTO: Configurar o botão Cadastrar
-        btnCadastrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                abrirTelaCadastro();
-            }
-        });
-
+        /* // Adicionando clientes à lista
+         clientes.add(new Cliente("1", "João", "joao@email.com", "999.999.999-99", "99999-9999", "Não informado"));
+         clientes.add(new Cliente("2", "Maria", "maria@email.com", "999.999.999-99", "99999-9999", "Não informado"));*/
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
     }
 
-    // Método para abrir a tela de cadastro
-    private void abrirTelaCadastro() {
-        JCadastro cadastro = new JCadastro(modeloTabela);
-        cadastro.setLocationRelativeTo(this); // Centralizar em relação à tela principal
-        cadastro.setVisible(true);
-    }
-
-//        JCadastro cadastro = new JCadastro(modeloTabela);
-//        cadastro.setVisible(true);
-//
-//        DAO dao = new DAO();
-//        try {
-//            //clientes = new ArrayList<>(); // Inicializando a lista
-//            clientes = dao.listarClientes();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        /* // Adicionando clientes à lista
-//         clientes.add(new Cliente("1", "João", "joao@email.com", "999.999.999-99", "99999-9999", "Não informado"));
-//         clientes.add(new Cliente("2", "Maria", "maria@email.com", "999.999.999-99", "99999-9999", "Não informado"));*/
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -122,8 +58,6 @@ public class JPrincipal extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        btnExcluir = new javax.swing.JButton();
-        btnAlterar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,7 +65,6 @@ public class JPrincipal extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"", "", null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -144,20 +77,6 @@ public class JPrincipal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jScrollPane2.setViewportView(jScrollPane1);
-
-        btnExcluir.setText("Excluir");
-        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirActionPerformed(evt);
-            }
-        });
-
-        btnAlterar.setText("Alterar");
-        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -172,12 +91,6 @@ public class JPrincipal extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(35, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAlterar)
-                .addGap(66, 66, 66))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,86 +101,11 @@ public class JPrincipal extends javax.swing.JFrame {
                     .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExcluir)
-                    .addComponent(btnAlterar))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
-    System.out.println("Cliquei no botão Excluir");
-
-    int linhaSelecionada = jTable1.getSelectedRow();
-    System.out.println("Linha selecionada: " + linhaSelecionada);
-
-    if (linhaSelecionada != -1) {
-        String id = jTable1.getValueAt(linhaSelecionada, 0).toString();
-        System.out.println("ID selecionado: " + id);
-
-        int confirmacao = JOptionPane.showConfirmDialog(
-                null,
-                "Você realmente quer excluir o(s) cadastro(s) selecionado(s)?",
-                "Confirmação",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        System.out.println("Confirmado? " + (confirmacao == JOptionPane.YES_OPTION));
-
-        if (confirmacao == JOptionPane.YES_OPTION) {
-            try {
-                DAO dao = new DAO();
-                dao.excluirCliente(id);
-                System.out.println("Cliente excluído no banco com sucesso");
-
-                ModeloTabela modelo = (ModeloTabela) jTable1.getModel();
-                modelo.removerClientePorId(id);
-                System.out.println("Cliente removido da tabela");
-
-                JOptionPane.showMessageDialog(null, "Cadastro excluído com sucesso!");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Erro ao excluir: " + ex.getMessage());
-            }
-        }
-    } else {
-        JOptionPane.showMessageDialog(null, "Selecione um cadastro para excluir.");
-    }
-    }//GEN-LAST:event_btnExcluirActionPerformed
-
-    
-    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        // TODO add your handling code here:
-        int linhaSelecionada = jTable1.getSelectedRow();
-    if (linhaSelecionada != -1) {
-        int confirmacao = JOptionPane.showConfirmDialog(
-                null,
-                "Você realmente quer alterar o cadastro selecionado?",
-                "Confirmação",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirmacao == JOptionPane.YES_OPTION) {
-            String id = jTable1.getValueAt(linhaSelecionada, 0).toString();
-            DAO dao = new DAO();
-            try {
-                Cliente clienteSelecionado = dao.consultarCliente(id);
-                JCadastro telaEdicao = new JCadastro(clienteSelecionado, modeloTabela);
-                telaEdicao.setLocationRelativeTo(this);
-                telaEdicao.setVisible(true);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Erro ao buscar cliente: " + ex.getMessage());
-            }
-        }
-    } else {
-        JOptionPane.showMessageDialog(null, "Selecione um cadastro para alterar.");
-    }
-    }//GEN-LAST:event_btnAlterarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -309,9 +147,7 @@ public class JPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnCadastrar;
-    private javax.swing.JButton btnExcluir;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
