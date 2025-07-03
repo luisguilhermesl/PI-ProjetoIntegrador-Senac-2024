@@ -5,7 +5,17 @@ import Model.ModeloTabela;
 import Model.Cliente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -14,49 +24,72 @@ import javax.swing.JOptionPane;
  * @author admin
  */
 public class JPrincipal extends javax.swing.JFrame {
-    
+
     private ArrayList<Cliente> clientes;
     private ModeloTabela modeloTabela;
-    
+
     /**
      * Creates new form JPrincipal
      */
-    public JPrincipal() {
+    private void tocarSom(String caminho) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        try {
+            InputStream audioSrc = getClass().getResourceAsStream(caminho);
+            InputStream bufferedIn = new BufferedInputStream(audioSrc);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JPrincipal() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         initComponents();
-        
+
         // Inicializar a lista de clientes
         DAO dao = new DAO();
-        try{
+        try {
             clientes = dao.listarClientes();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             clientes = new ArrayList<>();
         }
-        
+
         //Criar o ModeloTabela com a lista
         modeloTabela = new ModeloTabela(clientes);
-        
+
         // Configurando o tabelaCadastros para usar o ModeloTabela
         tabelaCadastros.setModel(modeloTabela);
-        
+
         // Configurar o botão Cadastrar
-        btnCadastrar.addActionListener(new ActionListener(){
-        
+        btnCadastrar.addActionListener(new ActionListener() {
+
             @Override
-            public void actionPerformed (ActionEvent e){
-                abrirTelaCadastro();
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    abrirTelaCadastro();
+                } catch (UnsupportedAudioFileException ex) {
+                    Logger.getLogger(JPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(JPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (LineUnavailableException ex) {
+                    Logger.getLogger(JPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
+
     //Método para abrir a tela de cadastro
-    private void abrirTelaCadastro(){
+    private void abrirTelaCadastro() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         JCadastro cadastro = new JCadastro(modeloTabela);
         cadastro.setLocationRelativeTo(this);
         cadastro.setVisible(true);
+        tocarSom("C:\\Users\\admin\\Documents\\PI-ProjetoIntegrador-Senac-2024-master\\PI-ProjetoIntegrador-Senac-2024-master\\src\\abrirjanela.wav");
+
     }
-               
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,6 +128,11 @@ public class JPrincipal extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jScrollPane1);
 
         btnCadastrar.setText("CADASTRAR");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("CADASTROS");
@@ -145,9 +183,8 @@ public class JPrincipal extends javax.swing.JFrame {
                 .addGap(42, 42, 42)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)))
+                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
                 .addGap(58, 58, 58))
         );
 
@@ -168,62 +205,66 @@ public class JPrincipal extends javax.swing.JFrame {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // TODO add your handling code here:
         int linhaSelecionada = tabelaCadastros.getSelectedRow();
-        System.out.println("Linha selecionada:"+linhaSelecionada);
-        
-        if(linhaSelecionada != -1){
-            String id = tabelaCadastros.getValueAt(linhaSelecionada,0).toString();
-            System.out.println("ID selecionado:"+id);
-            
-            int confirmacao = JOptionPane.showConfirmDialog(null,"Você realmente quer"
-                    + "excluir o cadastro selecionado?", "Confirmação", JOptionPane.YES_NO_OPTION);            
-            System.out.println("Confirmado?" +(confirmacao == JOptionPane.YES_OPTION));
-            
-            if(confirmacao == JOptionPane.YES_OPTION){
-                try{
+        System.out.println("Linha selecionada:" + linhaSelecionada);
+
+        if (linhaSelecionada != -1) {
+            String id = tabelaCadastros.getValueAt(linhaSelecionada, 0).toString();
+            System.out.println("ID selecionado:" + id);
+
+            int confirmacao = JOptionPane.showConfirmDialog(null, "Você realmente quer"
+                    + "excluir o cadastro selecionado?", "Confirmação", JOptionPane.YES_NO_OPTION);
+            System.out.println("Confirmado?" + (confirmacao == JOptionPane.YES_OPTION));
+
+            if (confirmacao == JOptionPane.YES_OPTION) {
+                try {
                     DAO dao = new DAO();
                     dao.excluirCliente(id);
                     System.out.println("Cliente excluído do banco com sucesso");
-                    ModeloTabela modelo = (ModeloTabela)tabelaCadastros.getModel();
+                    ModeloTabela modelo = (ModeloTabela) tabelaCadastros.getModel();
                     modelo.removerClientePorId(id);
                     System.out.println("Cliente removido da tabela");
-                    JOptionPane.showMessageDialog(null,"Cadastro excluído com sucesso!");
-                }catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Cadastro excluído com sucesso!");
+                } catch (Exception e) {
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erro ao excluir:"+e.getMessage());
+                    JOptionPane.showMessageDialog(null, "Erro ao excluir:" + e.getMessage());
                 }
             }
-        }else{
-            JOptionPane.showMessageDialog(null,"Selecione um cadastro para excluir");
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um cadastro para excluir");
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         // TODO add your handling code here:
-            // TODO add your handling code here:
+        // TODO add your handling code here:
         int linhaSelecionada = tabelaCadastros.getSelectedRow();
-        
-        if(linhaSelecionada != -1){
-            int confirmacao = JOptionPane.showConfirmDialog(null,"Você realmente quer"
-                    + "alterar o cadastro selecionado?", "Confirmação", JOptionPane.YES_NO_OPTION);            
-           
-            
-            if(confirmacao == JOptionPane.YES_OPTION){
-                 String id = tabelaCadastros.getValueAt(linhaSelecionada,0).toString();
-                 DAO dao = new DAO();
-                try{
+
+        if (linhaSelecionada != -1) {
+            int confirmacao = JOptionPane.showConfirmDialog(null, "Você realmente quer"
+                    + "alterar o cadastro selecionado?", "Confirmação", JOptionPane.YES_NO_OPTION);
+
+            if (confirmacao == JOptionPane.YES_OPTION) {
+                String id = tabelaCadastros.getValueAt(linhaSelecionada, 0).toString();
+                DAO dao = new DAO();
+                try {
                     Cliente clienteSelecionado = dao.consultarCliente(id);
-                    JCadastro telaEdicao = new JCadastro(clienteSelecionado,modeloTabela);
+                    JCadastro telaEdicao = new JCadastro(clienteSelecionado, modeloTabela);
                     telaEdicao.setLocationRelativeTo(this);
                     telaEdicao.setVisible(true);
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erro ao buscar cliente:"+e.getMessage());
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar cliente:" + e.getMessage());
                 }
             }
-        }else{
-            JOptionPane.showMessageDialog(null,"Selecione um cadastro para alterar");
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um cadastro para alterar");
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnCadastrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -253,7 +294,7 @@ public class JPrincipal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-         java.awt.EventQueue.invokeLater(() -> {
+        java.awt.EventQueue.invokeLater(() -> {
             try {
                 JLogin frame = new JLogin();
                 frame.setLocationRelativeTo(null);

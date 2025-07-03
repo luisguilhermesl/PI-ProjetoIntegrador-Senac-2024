@@ -1,25 +1,93 @@
 package View;
 
 import Controller.Criptografia;
+import java.awt.AlphaComposite;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
  * @author admin
  */
 public class JLogin extends javax.swing.JFrame {
+    
+    
 
     /**
      * Creates new form JLogin
      */
+   // FundoPanel fundo = new FundoPanel();
+
     public JLogin() {
+       // this.setContentPane(fundo);
         initComponents();
         senhaUsuario.addActionListener(e -> btnEntrar.doClick());
         setLocationRelativeTo(null);
         setTitle("TELA DE LOGIN");
+        
+        //-------------------------------------------------------- INICIO - CONFIGURAÇÃO DA IMAGEM
+        
+        // Configurando o JFrame
+        setSize(1020, 620);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(null);
+
+        // Criando o JPanel com imagem de fundo
+        JPanel P = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                  super.paintComponent(g);
+                  Graphics2D g2d = (Graphics2D) g.create();
+                  Image imagem = new ImageIcon("C:\\Users\\admin\\Documents\\PI-ProjetoIntegrador-Senac-2024-master\\PI-ProjetoIntegrador-Senac-2024-master\\src\\Imagens\\5aituomk.png").getImage();
+                  float transparencia = 0.5f;
+                  g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,transparencia));
+                  g2d.drawImage(imagem,0,0, getWidth(),getHeight(),this);
+                  g2d.drawImage(imagem,0,0, 1020,620,this);
+                  g2d.dispose();
+//                
+//                ImageIcon imagemPanel = new ImageIcon("C:\\Users\\dev\\Documents\\NetBeansProjects\\Swing - NPC Revoltado\\src\\Resource\\Menu Iniciar.png");
+//                g.drawImage(imagemPanel.getImage(), 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        P.setBounds(50, 50, 1020, 620); // Define posição e tamanho
+        P.setOpaque(true); // Torna o painel transparente
+        P.setLayout(null); // Define layout absoluto no painel
+
+
+
+        // Adiciona o painel ao JFrame
+        getContentPane().add(P);
+
+        // Configurando o fundo
+        //ImageIcon imagemBackground = new ImageIcon("C:\\Users\\admin\\Documents\\PI-ProjetoIntegrador-Senac-2024-master\\PI-ProjetoIntegrador-Senac-2024-master\\src\\Imagens\\5aituomk.png");
+        
+//        JLabel labelBackground = new JLabel(imagemBackground);
+//        labelBackground.setBounds(0, 0, 1020, 620);
+//
+////         Adiciona o fundo como último elemento
+//        getContentPane().add(labelBackground);
+        
+        //-------------------------------------------------------- FIM - CONFIGURAÇÃO DA IMAGEM
     }
+        
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,7 +98,6 @@ public class JLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -40,9 +107,8 @@ public class JLogin extends javax.swing.JFrame {
         senhaUsuario = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel1.setMaximumSize(new java.awt.Dimension(600, 800));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setPreferredSize(new java.awt.Dimension(1020, 620));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("SEJA BEM-VINDO");
@@ -85,11 +151,12 @@ public class JLogin extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                            .addComponent(senhaUsuario)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(168, 168, 168)
-                        .addComponent(btnEntrar)))
-                .addContainerGap(57, Short.MAX_VALUE))
+                            .addComponent(senhaUsuario))))
+                .addContainerGap(31, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnEntrar)
+                .addGap(149, 149, 149))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,37 +171,26 @@ public class JLogin extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(senhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnEntrar)
-                .addGap(39, 39, 39))
-        );
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(120, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(112, 112, 112))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(304, 304, 304)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(308, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(165, 165, 165)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(169, Short.MAX_VALUE))
         );
 
         pack();
@@ -148,19 +204,25 @@ public class JLogin extends javax.swing.JFrame {
         //JButton btnEntrar = new JButton("Entrar");
         Criptografia cripto = new Criptografia(senhaUsuario.getText(), Criptografia.MD5);
         //System.out.println(cripto.criptografar());
-        
 
         //Usuario e Senha: root -- hash:63A9F0EA7BB98050796B649E85481845
-        
         if (txtUsuario.getText() != null && !txtUsuario.getText().isEmpty()
                 && senhaUsuario.getText() != null && !senhaUsuario.getText().isEmpty()) {
-            
-           if (cripto.criptografar().equals("63A9F0EA7BB98050796B649E85481845")) {//
+
+            if (cripto.criptografar().equals("63A9F0EA7BB98050796B649E85481845")) {try {
+                //
                 JOptionPane.showMessageDialog(btnEntrar, "Informações Corretas\nSeja bem-vindo!");
                 dispose();
                 JPrincipal jp = new JPrincipal();
                 jp.setLocationRelativeTo(jp);
                 jp.setVisible(true);
+                } catch (UnsupportedAudioFileException ex) {
+                    Logger.getLogger(JLogin.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(JLogin.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (LineUnavailableException ex) {
+                    Logger.getLogger(JLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         } else {
             JOptionPane.showMessageDialog(btnEntrar, "Verifique as Informações", "\nAviso", JOptionPane.WARNING_MESSAGE);
@@ -174,7 +236,7 @@ public class JLogin extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -198,6 +260,29 @@ public class JLogin extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        //ADICIONANDO IMAGEM
+//        BufferedImage img = null;
+//        try{
+//            img = ImageIO.read(new File("C:/Users/SeuUsuario/Documents/Imagens/walpapper3d2.png")); //"C:\Users\admin\Pictures\walpapper3d2.png"
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
+//        
+//        //Criando e configurando a janela
+//        JFrame  janela = new JFrame();
+//        janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        janela.setSize(1280,720);
+//        
+//        Image dimg = img.getScaledInstance(janela.getWidth(),janela.getHeight(),Image.SCALE_SMOOTH);
+//                
+//        ImageIcon imgi = new ImageIcon(dimg);
+//        janela.setVisible(true);
+        
+
+
+
+
+        
         /* Create and display the form */
         EventQueue.invokeLater(() -> {
             try {
@@ -215,9 +300,19 @@ public class JLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField senhaUsuario;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+
+//    class FundoPanel extends JPanel {
+//        private Image imagem;
+//        @Override
+//        public void paint(Graphics g) {
+//            imagem = new ImageIcon(getClass().getResource("/Imagens/walpapper3d.jpg")).getImage();
+//            g.drawImage(imagem, 0, 0, getWidth(), getHeight(), this);
+//            setOpaque(false);
+//            super.paint(g);
+//        }   
+//    }
 }

@@ -68,6 +68,8 @@ public class ModeloTabela extends AbstractTableModel {
         }
     }
 
+    
+    
     public void atualizarCliente(Cliente clienteAtualizado) {
         for (int i = 0; i < clientes.size(); i++) {
             if(clientes.get(i).getId().equals(clienteAtualizado.getId())){
@@ -78,3 +80,8 @@ public class ModeloTabela extends AbstractTableModel {
         }
     }
 }
+
+
+
+
+
